@@ -1,0 +1,71 @@
+=== Binary parse mismatches ===
+
+OpA               : ,
+OpB               : ,
+SourcePrecedenceA : 14
+SourcePrecedenceB : 14
+Expected          : Left
+Observed          : Neither
+Match             : False
+NoParensAst       : (ARRAY $a, $b, $c)
+LeftAst           : (ARRAY (ARRAY $a, $b), $c)
+RightAst          : (ARRAY $a, (ARRAY $b, $c))
+Source            : $a , $b , $c
+
+=== Special-level parse mismatches ===
+<none>
+=== Equal-precedence left-associativity spot checks ===
+OpA      : -and
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -and
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -and
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+

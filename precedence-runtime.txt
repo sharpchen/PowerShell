@@ -1,0 +1,174 @@
+=== Binary parse mismatches ===
+<none>
+=== Special-level parse mismatches ===
+<none>
+=== Equal-precedence left-associativity spot checks ===
+
+OpA      : -and
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -and
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -and
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -or
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -and
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -or
+Expected : Left
+Observed : Left
+Match    : True
+
+OpA      : -xor
+OpB      : -xor
+Expected : Left
+Observed : Left
+Match    : True
+
+=== Special runtime results ===
+Test            : postfix member access beats prefix unary
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : System.Int32:-3
+RuntimeLeft     : ERROR:MethodNotFound,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+RuntimeRight    : System.Int32:-3
+
+Test            : postfix increment beats prefix unary
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : System.Int32:-3
+RuntimeLeft     : ERROR:OperatorRequiresVariableOrProperty,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+RuntimeRight    : System.Int32:-3
+
+Test            : cast is prefix-unary level and beats additive
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.Double:3.5
+RuntimeLeft     : System.Double:3.5
+RuntimeRight    : ERROR:InvalidCastFromStringToInteger,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+
+Test            : prefix unary beats additive
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.Int32:2
+RuntimeLeft     : System.Int32:2
+RuntimeRight    : System.Int32:-35
+
+Test            : infix comma beats additive
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : array[3]<System.Int32:1, System.Int32:2, System.Int32:3>
+RuntimeLeft     : array[3]<System.Int32:1, System.Int32:2, System.Int32:3>
+RuntimeRight    : array[2]<System.Int32:1, System.Int32:5>
+
+Test            : infix comma beats range
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : ERROR:System.InvalidCastException,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+RuntimeLeft     : array[2]<array[3]<System.Int32:1, System.Int32:2, System.Int32:3>, System.Int32:9>
+RuntimeRight    : ERROR:System.InvalidCastException,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+
+Test            : unary comma is at unary level
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : array[2]<System.Int32:2, System.Int32:3>
+RuntimeLeft     : array[2]<System.Int32:2, System.Int32:3>
+RuntimeRight    : System.Int32:5
+
+Test            : unary split beats comparison
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.String:a
+RuntimeLeft     : System.String:a
+RuntimeRight    : System.String:False
+
+Test            : unary join beats comparison
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.Boolean:True
+RuntimeLeft     : System.Boolean:True
+RuntimeRight    : System.String:
+
+Test            : logical is below ternary
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.String:A
+RuntimeLeft     : System.String:A
+RuntimeRight    : System.Boolean:True
+
+Test            : additive is above ternary
+Expected        : Left
+Observed        : Left
+Match           : True
+RuntimeNoParens : System.Int32:3
+RuntimeLeft     : System.Int32:3
+RuntimeRight    : System.Int32:4
+
+Test            : assignment is right-associative
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : <null>
+RuntimeLeft     : ERROR:InvalidLeftHandSide,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+RuntimeRight    : <null>
+
+Test            : assignment is below pipe
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : <null>
+RuntimeLeft     : System.String:3
+                  
+RuntimeRight    : <null>
+
+Test            : assignment is below pipeline chain
+Expected        : Right
+Observed        : Right
+Match           : True
+RuntimeNoParens : <null>
+RuntimeLeft     : array[2]<System.Boolean:True, System.Boolean:False>
+RuntimeRight    : <null>
+
